@@ -1,0 +1,141 @@
+/* SIMPM PG Rendeng — Industrial Clean (lihat design.md) */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#f4f5f7; --panel:#ffffff;
+  --ink:#1c2126; --ink-soft:#5b6470;
+  --line:#e2e5ea; --line-soft:#edeff2;
+  --steel:#1f2933;
+  --green:#1e8e5a; --green-soft:#e6f4ec;
+  --amber:#b3790a; --amber-soft:#fbf0dd;
+  --red:#c0392b; --red-soft:#fbe9e7;
+  --blue:#2563a8; --blue-soft:#e8f0fa;
+  --radius:6px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif; font-size:13.5px; line-height:1.45;
+}
+h1,h2,h3,.display{font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.2px;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;}
+
+.app-shell{display:flex; min-height:100vh;}
+.sidebar{
+  width:230px; flex-shrink:0; background:var(--steel); color:#d7dbe0;
+  padding:18px 0; position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.sidebar .brand{padding:0 18px 16px; border-bottom:1px solid #33404a; margin-bottom:12px;}
+.sidebar .brand strong{display:block; font-family:'Barlow Condensed',sans-serif; font-size:19px; color:#fff;}
+.sidebar .brand span{font-size:11px; color:#8a94a0;}
+.sidebar .group-label{font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:#7c8792; padding:14px 18px 6px;}
+.sidebar a.nav-link{
+  display:flex; align-items:center; gap:10px; padding:8px 18px; color:#c7ccd3;
+  text-decoration:none; font-size:13px; border-left:3px solid transparent;
+}
+.sidebar a.nav-link:hover{background:#2a333b; color:#fff;}
+.sidebar a.nav-link.active{background:#2a333b; color:#fff; border-left-color:var(--blue);}
+.sidebar svg{width:16px; height:16px; flex-shrink:0;}
+.sidebar .logout-btn{
+  margin:16px 18px 0; padding:8px 12px; width:calc(100% - 36px); text-align:left;
+  background:transparent; border:1px solid #3a4650; color:#c7ccd3; border-radius:var(--radius); cursor:pointer; font-size:12.5px;
+}
+
+.main{flex:1; min-width:0;}
+.topbar{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 24px; background:var(--panel); border-bottom:1px solid var(--line);
+}
+.topbar .role-pill{font-size:11px; padding:3px 10px; border-radius:100px; background:var(--blue-soft); color:var(--blue); font-weight:600;}
+.content{padding:22px 24px 40px;}
+
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin-bottom:18px;}
+.panel-title{font-size:16px; margin:0 0 12px;}
+
+.grid-stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:18px;}
+.stat-card{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--ink-soft); border-radius:var(--radius); padding:12px 14px;}
+.stat-card.c-green{border-left-color:var(--green);}
+.stat-card.c-amber{border-left-color:var(--amber);}
+.stat-card.c-red{border-left-color:var(--red);}
+.stat-card.c-blue{border-left-color:var(--blue);}
+.stat-card .label{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);}
+.stat-card .value{font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:500; margin-top:4px;}
+
+.badge{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; padding:2px 8px; border-radius:100px; font-weight:600;}
+.badge .dot{width:6px; height:6px; border-radius:50%; display:inline-block;}
+.badge.normal, .badge.selesai, .badge.disetujui{background:var(--green-soft); color:var(--green);}
+.badge.normal .dot, .badge.selesai .dot, .badge.disetujui .dot{background:var(--green);}
+.badge.perhatian, .badge.menunggu_validasi, .badge.sedang{background:var(--amber-soft); color:var(--amber);}
+.badge.perhatian .dot, .badge.menunggu_validasi .dot, .badge.sedang .dot{background:var(--amber);}
+.badge.perbaikan, .badge.ditolak, .badge.tinggi{background:var(--red-soft); color:var(--red);}
+.badge.perbaikan .dot, .badge.ditolak .dot, .badge.tinggi .dot{background:var(--red);}
+.badge.terjadwal, .badge.rendah, .badge.info{background:var(--blue-soft); color:var(--blue);}
+.badge.terjadwal .dot, .badge.rendah .dot, .badge.info .dot{background:var(--blue);}
+
+.filter-row{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:end;}
+.field{display:flex; flex-direction:column; gap:4px;}
+.field label{font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em;}
+select, input[type=text], input[type=date], input[type=number], input[type=email], input[type=password], textarea{
+  border:1px solid var(--line); border-radius:var(--radius); padding:7px 10px; font-size:13px; font-family:inherit;
+  background:#fff; color:var(--ink); min-width:150px;
+}
+textarea{min-width:100%; min-height:80px;}
+.btn{
+  display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:#fff; color:var(--ink);
+  padding:7px 14px; border-radius:var(--radius); font-size:13px; cursor:pointer; text-decoration:none;
+}
+.btn:hover{background:var(--line-soft);}
+.btn-primary{background:var(--steel); border-color:var(--steel); color:#fff;}
+.btn-primary:hover{background:#2a333b;}
+.btn-danger{color:var(--red); border-color:var(--red-soft);}
+.btn-sm{padding:4px 10px; font-size:12px;}
+
+.table-scroll{overflow-x:auto;}
+table{width:100%; border-collapse:collapse; font-size:12.8px;}
+thead th{text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); padding:8px 10px; border-bottom:1px solid var(--line);}
+tbody td{padding:9px 10px; border-bottom:1px solid var(--line-soft);}
+tbody tr:hover{background:var(--line-soft);}
+
+.progress-track{height:8px; background:var(--line-soft); border-radius:100px; overflow:hidden;}
+.progress-fill{height:100%; border-radius:100px;}
+.progress-fill.green{background:var(--green);}
+.progress-fill.amber{background:var(--amber);}
+.progress-fill.red{background:var(--red);}
+.progress-fill.blue{background:var(--blue);}
+
+.mini-list{list-style:none; margin:0; padding:0;}
+.mini-list li{display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--line-soft); font-size:12.8px;}
+.mini-list li:last-child{border-bottom:none;}
+.empty-state{color:var(--ink-soft); font-size:13px; padding:20px 0; text-align:center;}
+
+.bar-chart{display:flex; flex-direction:column; gap:8px;}
+.bar-row{display:grid; grid-template-columns:120px 1fr 56px; align-items:center; gap:8px; font-size:12px;}
+.bar-track{background:var(--line-soft); border-radius:4px; height:14px; overflow:hidden;}
+.bar-fill{height:100%; background:var(--blue); border-radius:4px;}
+
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(20,24,28,.45); display:none; align-items:center; justify-content:center; z-index:50;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#fff; border-radius:var(--radius); padding:20px 22px; width:100%; max-width:480px; max-height:90vh; overflow-y:auto;}
+.modal-box h3{margin-top:0;}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.form-grid .full{grid-column:1/-1;}
+.form-actions{display:flex; justify-content:flex-end; gap:8px; margin-top:14px;}
+
+.login-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--steel);}
+.login-box{background:#fff; border-radius:var(--radius); padding:32px 30px; width:100%; max-width:380px;}
+.login-box h1{font-size:24px; margin:0 0 4px;}
+.login-box p.sub{color:var(--ink-soft); font-size:12.5px; margin:0 0 20px;}
+.login-box .field{margin-bottom:12px;}
+.login-box input{width:100%;}
+.login-box .btn-primary{width:100%; justify-content:center; padding:9px;}
+.alert{padding:9px 12px; border-radius:var(--radius); font-size:12.5px; margin-bottom:12px;}
+.alert-error{background:var(--red-soft); color:var(--red);}
+.alert-success{background:var(--green-soft); color:var(--green);}
+
+.tabs{display:flex; gap:4px; border-bottom:1px solid var(--line); margin-bottom:14px;}
+.tabs a{padding:8px 14px; font-size:12.8px; text-decoration:none; color:var(--ink-soft); border-bottom:2px solid transparent;}
+.tabs a.active{color:var(--ink); border-bottom-color:var(--blue); font-weight:600;}
