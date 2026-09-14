@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123b29">
 <title>@yield('title', 'Dashboard') — SIMPM PG Rendeng</title>
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
@@ -10,12 +11,10 @@
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
-      <strong>SIMPM</strong>
-      <span>PG Rendeng</span>
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 17V8h4v9H5Zm5 0V5h4v12h-4Zm5 0v-6h4v6h-4Z" fill="currentColor"/><path d="M4 20h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      <div><strong>SIMPM</strong><span>PG Rendeng</span></div>
     </div>
-
     @php $user = auth()->user(); @endphp
-
     @if($user->role === 'supervisor')
       <div class="group-label">Utama</div>
       <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><x-icon name="dashboard"/> Dashboard</a>
@@ -50,33 +49,16 @@
       <div class="group-label">Akun</div>
       <a class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}"><x-icon name="profile"/> Profil Saya</a>
     @endif
-
     <form method="POST" action="{{ route('logout') }}">
       @csrf
       <button class="logout-btn" type="submit"><x-icon name="logout"/> Keluar</button>
     </form>
   </aside>
-
   <div class="main">
-    <div class="topbar">
-      <div>
-        <strong>@yield('title', 'Dashboard')</strong>
-      </div>
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span class="role-pill">{{ ucfirst($user->role) }}</span>
-        <span>{{ $user->name }}</span>
-      </div>
-    </div>
+    <div class="topbar"><div><strong>@yield('title', 'Dashboard')</strong></div><div style="display:flex;align-items:center;gap:10px;"><span class="role-pill">{{ ucfirst($user->role) }}</span><span>{{ $user->name }}</span></div></div>
     <div class="content">
-      @if(session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-      @endif
-      @if($errors->any())
-        <div class="alert alert-error">
-          @foreach($errors->all() as $e) <div>{{ $e }}</div> @endforeach
-        </div>
-      @endif
-
+      @if(session('status'))<div class="alert alert-success">{{ session('status') }}</div>@endif
+      @if($errors->any())<div class="alert alert-error">@foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach</div>@endif
       @yield('content')
     </div>
   </div>
