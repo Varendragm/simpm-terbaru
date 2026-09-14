@@ -18,17 +18,32 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'role' => ['required', 'in:supervisor,teknisi,manajer'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
+        $role = $credentials['role'];
+        unset($credentials['role']);
 
-            return redirect()->intended(route('dashboard'));
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            if (Auth::user()->role !== $role) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun tersebut tidak terdaftar sebagai ' . ucfirst($role) . '.',
+                ])->withInput($request->except('password'));
+            }
+
+            $request->session()->regenerate();
+            return redirect()->route('welcome');
         }
 
         return back()->withErrors([
             'email' => 'Email atau password tidak sesuai.',
-        ])->onlyInput('email');
+        ])->withInput($request->except('password'));
+    }
+
+    public function welcome()
+    {
+        return view('auth.welcome', ['user' => Auth::user()]);
     }
 
     public function logout(Request $request)
@@ -37,6 +52,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('splash');
     }
 }

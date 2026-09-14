@@ -13,7 +13,7 @@ use App\Http\Controllers\StationController;
 use App\Http\Controllers\ValidationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('login'));
+Route::get('/', fn () => view('splash'))->name('splash');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -21,34 +21,29 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/selamat-datang', [LoginController::class, 'welcome'])->name('welcome');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Profil & akun - seluruh peran
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
-    // Monitoring performa - seluruh peran (Teknisi hanya melihat performa miliknya via filter)
     Route::get('/performa', [PerformanceController::class, 'index'])->name('performance.index');
     Route::get('/performa/{machine}', [PerformanceController::class, 'show'])->name('performance.show');
 
-    // Master Stasiun & Mesin - Supervisor
     Route::middleware('role:supervisor')->group(function () {
         Route::get('/master/stasiun-mesin', [StationController::class, 'index'])->name('stations.index');
         Route::post('/master/stasiun', [StationController::class, 'store'])->name('stations.store');
         Route::put('/master/stasiun/{station}', [StationController::class, 'update'])->name('stations.update');
         Route::delete('/master/stasiun/{station}', [StationController::class, 'destroy'])->name('stations.destroy');
-
         Route::post('/master/mesin', [MachineController::class, 'store'])->name('machines.store');
         Route::put('/master/mesin/{machine}', [MachineController::class, 'update'])->name('machines.update');
         Route::delete('/master/mesin/{machine}', [MachineController::class, 'destroy'])->name('machines.destroy');
     });
 
     Route::get('/master/stasiun/{station}/mesin', [MachineController::class, 'byStation'])->name('machines.byStation');
-
-    // Jadwal Preventive Maintenance
     Route::get('/jadwal', [PmScheduleController::class, 'index'])->name('schedules.index');
     Route::get('/jadwal/{schedule}', [PmScheduleController::class, 'show'])->name('schedules.show');
 
@@ -57,23 +52,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/jadwal', [PmScheduleController::class, 'store'])->name('schedules.store');
     });
 
-    // Laporan pemeriksaan Teknisi
     Route::middleware('role:teknisi')->group(function () {
         Route::get('/jadwal/{schedule}/laporan', [InspectionReportController::class, 'create'])->name('reports.create');
         Route::post('/jadwal/{schedule}/laporan', [InspectionReportController::class, 'store'])->name('reports.store');
     });
 
-    // Validasi Pemeriksaan - Supervisor
     Route::middleware('role:supervisor')->group(function () {
         Route::get('/validasi', [ValidationController::class, 'index'])->name('validation.index');
         Route::get('/validasi/{schedule}', [ValidationController::class, 'show'])->name('validation.show');
         Route::post('/validasi/{schedule}', [ValidationController::class, 'store'])->name('validation.store');
     });
 
-    // Riwayat Maintenance
     Route::get('/riwayat', [MaintenanceHistoryController::class, 'index'])->name('history.index');
 
-    // Laporan & Grafik
     Route::middleware('role:supervisor,manajer')->group(function () {
         Route::get('/laporan', [ReportController::class, 'index'])->name('reports.index');
     });
